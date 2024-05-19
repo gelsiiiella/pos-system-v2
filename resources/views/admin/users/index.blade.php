@@ -150,6 +150,15 @@
                                         <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                                             scope="row">{{ $user->name }}</th>
                                         <td class="px-4 py-3">{{ $user->email }}</td>
+                                        <td class="px-4 py-3">
+                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <x-danger-button>
+                                                    Delete
+                                                </x-danger-button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
