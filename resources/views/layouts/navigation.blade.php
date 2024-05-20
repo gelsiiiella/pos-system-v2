@@ -26,7 +26,7 @@
                             {{ __('Users') }}
                         </x-nav-link>
                         <x-nav-link :active="request()->routeIs('admin.products.index')" :href="route('admin.products.index')">
-                            Products
+                            Product Management
                         </x-nav-link>
                     @elseif (Auth::user()->hasRole('employee'))
                         <x-nav-link :active="request()->routeIs('dashboard')" :href="route('dashboard')">

@@ -10,5 +10,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('ad
 
     Route::resource('users', UserController::class)->only(['index', 'destroy']);
     Route::resource('products', ProductController::class)->only(['index', 'create', 'edit', 'show', 'update', 'destroy']);
+
 });
+
+
 
