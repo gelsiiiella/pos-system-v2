@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -13,7 +14,10 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view ('products.index',['products'=>$products]);
+
+        return view('admin.products.index', [
+            'products' => $products,
+        ]);
     }
 
     /**
@@ -22,50 +26,50 @@ class ProductController extends Controller
     public function create()
     {
         $products = Product::all();
-        return view ('products.create',['products'=>$products]);
+        return view('admin.products.create', ['products' => $products]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    // Validate the request data
-    $validatedData = $request->validate([
-        'id' => 'required|max:20',
-        'name' => 'required|max:255|string',
-        'category' => 'required|max:255|string',
-        'price' => 'required|numeric',
-        'quantity' => 'required|numeric',
-        'status' => 'required',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'id' => 'required|max:20',
+            'name' => 'required|max:255|string',
+            'category' => 'required|max:255|string',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'status' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Handle the image upload
-    $imagePath = $request->file('image')->store('images', 'public');
+        // Handle the image upload
+        $imagePath = $request->file('image')->store('images', 'public');
 
-    // Create the product
-    Product::create([
-        'id' => $validatedData['id'],
-        'name' => $validatedData['name'],
-        'category' => $validatedData['category'],
-        'price' => $validatedData['price'],
-        'quantity' => $validatedData['quantity'],
-        'status' => $validatedData['status'],
-        'image' => $imagePath,
-    ]);
+        // Create the product
+        Product::create([
+            'id' => $validatedData['id'],
+            'name' => $validatedData['name'],
+            'category' => $validatedData['category'],
+            'price' => $validatedData['price'],
+            'quantity' => $validatedData['quantity'],
+            'status' => $validatedData['status'],
+            'image' => $imagePath,
+        ]);
 
-    // Redirect with a success message
-    return redirect('products/create')->with('status', 'New Product Added');
-}
+        // Redirect with a success message
+        return redirect()->route('admin.products.create')->with('status', 'New Product Added');
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $products = Product::all();
-        return view ('products.show',['products'=>$products]);
+        $product = Product::findOrFail($id);
+        return view('admin.products.show', ['product' => $product]);
     }
 
     /**
@@ -73,8 +77,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $products = Product::all();
-        return view ('products.edit',['products'=>$products]);
+        $product = Product::findOrFail($id);
+        return view('admin.products.edit', ['product' => $product]);
     }
 
     /**
@@ -93,7 +97,7 @@ class ProductController extends Controller
         ]);
 
         // Find the product by ID
-        $products = Product::all();
+        $product = Product::findOrFail($id);
 
         // Handle the image upload if there's a new image
         if ($request->hasFile('image')) {
@@ -105,7 +109,7 @@ class ProductController extends Controller
         $product->update($validatedData);
 
         // Redirect with a success message
-        return redirect('products/'.$id.'/edit')->with('status', 'Product Updated');
+        return redirect()->route('admin.products.edit', $id)->with('status', 'Product Updated');
     }
 
     /**
@@ -113,6 +117,7 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
+        $product = Product::findOrFail($id);
         $product->delete();
 
         return redirect()->route('admin.products.index');
