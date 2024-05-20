@@ -35,35 +35,35 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'id' => 'required|max:20',
-            'name' => 'required|max:255|string',
-            'category' => 'required|max:255|string',
-            'price' => 'required|numeric',
-            'quantity' => 'required|numeric',
-            'status' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'id' => 'required|max:20',
+        'name' => 'required|max:255|string',
+        'category' => 'required|max:255|string',
+        'price' => 'required|numeric',
+        'quantity' => 'required|numeric',
+        'status' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        // Handle the image upload
-        $imagePath = $request->file('image')->store('images', 'public');
+    // Handle the image upload
+    $imagePath = $request->file('image')->store('images', 'public');
 
-        // Create the product
-        Product::create([
-            'id' => $validatedData['id'],
-            'name' => $validatedData['name'],
-            'category' => $validatedData['category'],
-            'price' => $validatedData['price'],
-            'quantity' => $validatedData['quantity'],
-            'status' => $validatedData['status'],
-            'image' => $imagePath,
-        ]);
+    // Create the product
+    Product::create([
+        'id' => $validatedData['id'],
+        'name' => $validatedData['name'],
+        'category' => $validatedData['category'],
+        'price' => $validatedData['price'],
+        'quantity' => $validatedData['quantity'],
+        'status' => $validatedData['status'],
+        'image' => $imagePath,
+    ]);
 
-        // Redirect with a success message
-        return redirect()->route('admin.products.create')->with('status', 'New Product Added');
-    }
+    return redirect()->route('admin.products.index')->with('status', 'New Product Added');
+}
+
 
     /**
      * Display the specified resource.

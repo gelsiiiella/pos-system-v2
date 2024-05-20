@@ -10,6 +10,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('ad
 
     Route::resource('users', UserController::class)->only(['index', 'destroy']);
     Route::resource('products', ProductController::class)->only(['index', 'create', 'edit', 'show', 'update', 'destroy']);
+    Route::get('products/create', [ProductController::class, 'create'])->name('admin.products.create');
+    Route::post('products/create', [ProductController::class, 'store'])->name('admin.products.create');
 
 });
 
