@@ -22,7 +22,7 @@
                         <x-nav-link :active="request()->routeIs('admin.dashboard')" :href="route('admin.dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
-                        <x-nav-link :active="request()->routeIs('admin.users')" :href="route('admin.users.index')">
+                        <x-nav-link :active="request()->routeIs('admin.users.index')" :href="route('admin.users.index')">
                             {{ __('Users') }}
                         </x-nav-link>
                     @elseif (Auth::user()->hasRole('employee'))
